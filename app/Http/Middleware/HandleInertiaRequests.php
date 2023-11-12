@@ -37,7 +37,10 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            //
+            'user.roles'=> $request->user() ? $request->user()->roles->pluck('name') : [],
+             // lo que hace es que si el usuario esta logueado, me va a devolver los roles que tiene, si no esta logueado, me va a devolver un array vacio
+            'user.permissions'=> $request->user() ? $request->user()->getPermissionsViaRoles()->pluck('name') : [], 
+            //getPermissionsViaRoles() es un metodo de la libreria spatie, que me devuelve los permisos que tiene el usuario a traves de los roles que tiene
         ]);
     }
 }
